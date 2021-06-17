@@ -2,10 +2,10 @@
 
 using namespace std;
 
-int n = 15;
-int k = 4;
-int arr[30];
-int count = 1;
+int n = 7;
+int k = 3;
+int arr[100];
+int count = 0;
 
 /*
 Liet to hop chap k phan tu cua n, tu 1, ..., n
@@ -24,7 +24,6 @@ void printArr() {
     for (int i = 1; i <= k; i++) {
         cout << arr[i] << " ";
     }
-    cout << count;
     count += 1;
     cout << endl;
 }
@@ -32,11 +31,12 @@ void printArr() {
 void Try(int i) {
     for(int j = arr[i-1]+1; j < n-k+i+1; j++) {
         arr[i] = j;
-        if (i == k+1) {
+        if (i == k) {
             printArr();
-            return;
         }
-        Try(i+1);
+        else {
+            Try(i+1);
+        }
     }
 }
 
