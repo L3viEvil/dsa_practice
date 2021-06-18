@@ -4,10 +4,11 @@ using namespace std;
 int n;
 // int map[1001][1001];
 int checkTable[1001][1001];
+int paths[1001][1001];
 int minPaths = 9999999;
 // int row, col;
-int xMove[3] = {-1, 1, 0};
-int yMove[3] = {0, 0, 1};
+int xMove[4] = {-1, 1, 0, 0};
+int yMove[4] = {0, 0, 1, -1};
 int row = 12;
 int col = 10;
 int map[12][10] = {
@@ -34,6 +35,7 @@ void initCheckTable() {
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
             checkTable[i][j] = 0;
+            paths[i][j] = 0;
         }
     }
 }
@@ -86,12 +88,26 @@ void Try(int i, int j, int currLenght) {
     if (j == col - 1) {
         if (currLenght < minPaths) {
             minPaths = currLenght;
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < col; j++) {
+                    paths[i][j] = checkTable[i][j];
+                }
+            }
+            // cout << "----------" << endl; // for debugging
+            // for (int i = 0; i < row; i++) {
+            //     for (int j = 0; j < col; j++) {
+            //         cout << paths[i][j] << " ";
+            //     }
+            //     cout << endl;
+            // }
+            // cout << "----------" << endl;
+
         }
     }
     else {
         if (currLenght < minPaths){
             checkTable[i][j] = 1;
-            for (int idx1 = 0; idx1 <= 2; idx1 += 1) {
+            for (int idx1 = 0; idx1 < 4; idx1 += 1) {
                 int new_i = i + xMove[idx1];
                 int new_j = j + yMove[idx1];
                 if (inMap(new_i, new_j) == true && checkTable[new_i][new_j] == 0 && map[new_i][new_j] == 1) { // kiem tra dieu kien an toan
@@ -108,9 +124,12 @@ int minPathLenght() {
     initCheckTable();
     int minPathLength = minPaths;
     for (int i = 0; i < row; i++) {
-        checkTable[i][0] = 1;
-        Try(i, 0, 0);
-        checkTable[i][0] = 0;
+        if (map[i][0] == 1) {
+            checkTable[i][0] = 1;
+            Try(i, 0, 0);
+            checkTable[i][0] = 0;
+        }
+        
         // if (minPathLength < minPaths) {
         //     minPathLength = minPaths;
         // }
@@ -124,6 +143,13 @@ int main() {
     int minlength = minPathLenght();
     if (minlength == 9999999) cout << "No way" << endl;
     else cout << minlength << endl;
+    cout << "+++++++++" << endl;
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            cout << paths[i][j] << " ";
+        }
+        cout << endl;
+    }
 
 
     return 0;
